@@ -1,10 +1,11 @@
 # Задание 3. Реализация собственного пакета модулей по манипулированию табличными данными
 
 > [!CAUTION]
-> The pickle module is not secure. Only unpickle data you trust.
-> It is possible to construct malicious pickle data which will execute arbitrary code during unpickling. Never unpickle
-> data that could have come from an untrusted source, or that could have been tampered with.
-> https://docs.python.org/3/library/pickle.html
+> Модуль pickle **небезопасен**. Распаковывайте только те данные, которым вы доверяете.
+>
+> Существует возможность создать вредоносные данные для pickle, которые **выполнят произвольный код во время распаковки**. Никогда не распаковывайте данные, которые могут поступать из ненадежного источника или могли быть подвержены изменениям.
+>
+> Смотреть подробнее: https://docs.python.org/3/library/pickle.html
 
 ## Информация
 
