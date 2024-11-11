@@ -133,3 +133,16 @@ class Table:
 
         for i, value in enumerate(values):
             self._data[i + 1][target_col_index] = value
+
+    def set_value(self, value, column: list | str = 0):
+        if len(self._data) < 2:
+            raise ValueError("Table is empty")
+
+        if isinstance(column, int):
+            target_index = column
+        elif isinstance(column, str):
+            target_index = self._data[0].index(column)
+        else:
+            raise TypeError("Unexpected type for column")
+
+        self._data[1][target_index] = value
