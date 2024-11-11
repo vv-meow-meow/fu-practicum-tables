@@ -49,17 +49,24 @@ class Table:
     def _infer_type(self, column):
         types = set()
         for value in column:
-            if value.isdigit():
+            if isinstance(value, int):
                 types.add(int)
+            elif isinstance(value, bool):
+                types.add(bool)
+            elif isinstance(value, float):
+                types.add(float)
             else:
-                try:
-                    float(value)
-                    types.add(float)
-                except ValueError:
-                    if value.lower() in ('true', 'false'):
-                        types.add(bool)
-                    else:
-                        types.add(str)
+                if value.isdigit():
+                    types.add(int)
+                else:
+                    try:
+                        float(value)
+                        types.add(float)
+                    except ValueError:
+                        if value.lower() in ('true', 'false'):
+                            types.add(bool)
+                        else:
+                            types.add(str)
 
         if len(types) == 1:
             return next(iter(types))
