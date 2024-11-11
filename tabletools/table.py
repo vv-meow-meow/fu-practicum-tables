@@ -94,3 +94,28 @@ class Table:
                     row[col_index] = desired_type(row[col_index])
                 except ValueError:
                     raise ValueError(f"Cannot convert value '{row[col_index]}' to {desired_type}'")
+
+    def get_values(self, column: int | str = 0) -> list:
+        if isinstance(column, int):
+            target_index = column
+        elif isinstance(column, str):
+            target_index = self._data[0].index(column)
+        else:
+            raise TypeError("Unexpected type for column")
+
+        for index, column in enumerate(zip(*self._data[1:])):
+            if index == target_index:
+                return list(column)
+
+    def get_value(self, column=0):
+        if len(self._data) < 2:
+            raise ValueError("Table is empty")
+
+        if isinstance(column, int):
+            target_index = column
+        elif isinstance(column, str):
+            target_index = self._data[0].index(column)
+        else:
+            raise TypeError("Unexpected type for column")
+
+        return self._data[1][target_index]
