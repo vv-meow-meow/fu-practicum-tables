@@ -81,3 +81,16 @@ class Table:
             column_name = index if by_number else self._data[0][index]
             column_types[column_name] = inferred_type
         return column_types
+
+    def set_column_types(self, column_types, by_number=True):
+        if not self._data:
+            raise ValueError("Table is empty")
+
+        for key, desired_type in column_types.items():
+            col_index = key if by_number else self._data[0].index(key)
+
+            for row in self._data[1:]:
+                try:
+                    row[col_index] = desired_type(row[col_index])
+                except ValueError:
+                    raise ValueError(f"Cannot convert value '{row[col_index]}' to {desired_type}'")
