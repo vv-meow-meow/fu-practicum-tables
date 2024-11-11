@@ -119,3 +119,17 @@ class Table:
             raise TypeError("Unexpected type for column")
 
         return self._data[1][target_index]
+
+    def set_values(self, values: list, column: list | str = 0):
+        if isinstance(column, int):
+            target_col_index = column
+        elif isinstance(column, str):
+            target_col_index = self._data[0].index(column)
+        else:
+            raise TypeError("Unexpected type for column")
+
+        if len(values) != len(self._data[1:]):
+            raise ValueError("Values must have same amount as original table")
+
+        for i, value in enumerate(values):
+            self._data[i + 1][target_col_index] = value
