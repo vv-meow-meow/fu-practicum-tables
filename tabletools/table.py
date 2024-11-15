@@ -4,8 +4,7 @@ from copy import deepcopy
 from typing import Type, TYPE_CHECKING  # Type hinting
 
 if TYPE_CHECKING:  # Type hinting
-    from tabletools import CSVHandler  # Type hinting
-    from tabletools import PickleHandler  # Type hinting
+    from tabletools import CSVHandler, PickleHandler, TXTHandler  # Type hinting
 
 
 class Table:
@@ -18,7 +17,7 @@ class Table:
         self._data = handler.load_table(*paths)
 
     def save_table(self,
-                   handler: Type[CSVHandler | PickleHandler],
+                   handler: Type[CSVHandler | PickleHandler | TXTHandler],
                    path: str):
         handler.save_table(self._data, path)
 
