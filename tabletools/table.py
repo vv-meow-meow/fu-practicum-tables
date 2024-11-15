@@ -1,14 +1,25 @@
+from __future__ import annotations  # Type hinting
+
 from copy import deepcopy
+from typing import Type, TYPE_CHECKING  # Type hinting
+
+if TYPE_CHECKING:  # Type hinting
+    from tabletools import CSVHandler  # Type hinting
+    from tabletools import PickleHandler  # Type hinting
 
 
 class Table:
     def __init__(self, data=None):
         self._data = data or []
 
-    def load_data(self, path, handler):
-        self._data = handler.load_table(path)
+    def load_table(self,
+                   handler: Type[CSVHandler | PickleHandler],
+                   *paths: str):
+        self._data = handler.load_table(*paths)
 
-    def save_data(self, path, handler):
+    def save_table(self,
+                   handler: Type[CSVHandler | PickleHandler],
+                   path: str):
         handler.save_table(self._data, path)
 
     def _get_column_widths(self) -> list[int]:
@@ -28,7 +39,10 @@ class Table:
             row_str = " | ".join(f"{str(item):<{widths[i]}}" for i, item in enumerate(row))
             print(row_str)
 
-    def get_rows_by_number(self, start, stop=None, copy_table=False):
+    def get_rows_by_number(self,
+                           start,
+                           stop=None,
+                           copy_table=False):
         match stop:
             case None:
                 result = [self._data[start]]
@@ -82,7 +96,9 @@ class Table:
             column_types[column_name] = inferred_type
         return column_types
 
-    def set_column_types(self, column_types, by_number=True):
+    def set_column_types(self,
+                         column_types,
+                         by_number=True):
         if not self._data:
             raise ValueError("Table is empty")
 
@@ -120,7 +136,9 @@ class Table:
 
         return self._data[1][target_index]
 
-    def set_values(self, values: list, column: list | str = 0):
+    def set_values(self,
+                   values: list,
+                   column: list | str = 0):
         if isinstance(column, int):
             target_col_index = column
         elif isinstance(column, str):
@@ -134,7 +152,9 @@ class Table:
         for i, value in enumerate(values):
             self._data[i + 1][target_col_index] = value
 
-    def set_value(self, value, column: list | str = 0):
+    def set_value(self,
+                  value,
+                  column: list | str = 0):
         if len(self._data) < 2:
             raise ValueError("Table is empty")
 
