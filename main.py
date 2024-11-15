@@ -7,5 +7,5 @@ if __name__ == '__main__':
 
     table.print_table()
 
-    table.save_table("output.pkl", PickleHandler)
-    table.save_table("output.txt", TXTHandler)
+    table.save_table(PickleHandler, "output.pkl")
+    table.save_table(TXTHandler, "output.txt")
