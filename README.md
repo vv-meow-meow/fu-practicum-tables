@@ -33,7 +33,9 @@
 from tabletools import Table, CSVHandler, TXTHandler, PickleHandler
 
 table = Table()
-table.load_table(CSVHandler, "./table_samples/customers-100.csv", "./table_samples/customers-50.csv")
+table.load_table(CSVHandler,
+                 "./table_samples/customers-100.csv",
+                 "./table_samples/customers-50.csv")
 
 table.print_table()
 # Your table
