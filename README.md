@@ -28,16 +28,16 @@
 ## Как использовать?
 
 ```python
-from tabletools import Table, CSVHandler, PickleHandler, TXTHandler
+from tabletools import Table, CSVHandler, TXTHandler, PickleHandler
 
 table = Table()
-table.load_data("data.csv", CSVHandler)
+table.load_table(CSVHandler, "./table_samples/customers-100.csv", "./table_samples/customers-50.csv")
 
 table.print_table()
-# Output: Your table
+# Your table
 
-table.save_data("data.pkl", PickleHandler)
-table.save_data("data.txt", TXTHandler)
+table.save_table(PickleHandler, "output.pkl")
+table.save_table(TXTHandler, "output.txt")
 ```
 
 ## Задание
