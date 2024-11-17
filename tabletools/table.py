@@ -1,7 +1,7 @@
 from __future__ import annotations  # Type hinting
 
 from copy import deepcopy
-from typing import Type, TYPE_CHECKING  # Type hinting
+from typing import Type, TYPE_CHECKING, Tuple  # Type hinting
 
 if TYPE_CHECKING:  # Type hinting
     from tabletools import CSVHandler, PickleHandler, TXTHandler  # Type hinting
@@ -166,3 +166,45 @@ class Table:
             raise TypeError("Unexpected type for column")
 
         self._data[1][target_index] = value
+
+    def concat(self,
+               table_1: Table,
+               table_2: Table):
+        if self._data:
+            raise ValueError("Table is not empty, cannot concatenate tables")
+
+        if not table_1._data:
+            raise ValueError("Table #1 is empty")
+        elif not table_2._data:
+            raise ValueError("Table #2 is empty")
+
+        data_1 = table_1._data
+        data_2 = table_2._data
+
+        headers = [*data_1[0], *data_2[0]]
+
+        if len(headers) != len(set(headers)):
+            duplicates = [header for header in headers if headers.count(header) > 1]
+            raise ValueError(f"Duplicate header found: {', '.join(duplicates)}")
+
+        result_data = [*list(zip(*data_1)), *list(zip(*data_2))]
+        expected_row_length = len(result_data[0])
+        for row in result_data:
+            if len(row) != expected_row_length:
+                raise ValueError("Row length mismatch")
+
+        self._data = [list(item) for item in list(zip(*result_data))]
+
+    def split(self,
+              row_number: int) -> Tuple[Table, Table]:
+        if not self._data:
+            raise ValueError("Table is empty")
+
+        transported = [list(item) for item in zip(*self._data)]
+        data_part_1 = [list(item) for item in zip(*transported[:row_number - 1])]
+        data_part_2 = [list(item) for item in zip(*transported[row_number - 1:])]
+
+        return (
+            Table(data=data_part_1),
+            Table(data=data_part_2)
+        )

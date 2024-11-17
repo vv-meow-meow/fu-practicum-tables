@@ -8,6 +8,9 @@ if __name__ == '__main__':
 
     table.print_table()
 
-    table.save_table(CSVHandler, "output.csv", max_rows=20)
-    table.save_table(PickleHandler, "output.pkl")
-    table.save_table(TXTHandler, "output.txt")
+    splitted_table_1, splitted_table_2 = table.split(5)
+
+    splitted_table_1.save_table(CSVHandler, "splitted_table_1.csv", max_rows=20)
+    splitted_table_2.save_table(PickleHandler, "splitted_table_2.pkl")
+
+    table.save_table(TXTHandler, "table.txt")
