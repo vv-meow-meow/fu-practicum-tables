@@ -24,8 +24,9 @@
 ### Выполненные задания
 
 - Базовая часть – 7 баллов
-- Дополнительная часть – 1 балл
+- Дополнительная часть – 2 балла
     - Задание 1 – 1 балл
+    - Задание 2 – 1 балл
 
 ## Как использовать?
 
@@ -40,6 +41,7 @@ table.load_table(CSVHandler,
 table.print_table()
 # Your table
 
+table.save_table(CSVHandler, "output.csv", max_rows=20)
 table.save_table(PickleHandler, "output.pkl")
 table.save_table(TXTHandler, "output.txt")
 ```
