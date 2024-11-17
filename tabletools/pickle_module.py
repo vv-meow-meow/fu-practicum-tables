@@ -1,4 +1,5 @@
 import pickle
+from math import ceil
 
 
 class PickleHandler:
@@ -22,6 +23,25 @@ class PickleHandler:
         return result
 
     @staticmethod
-    def save_table(data, path: str):
-        with open(path, 'wb') as file:
-            pickle.dump(data, file)
+    def save_table(data, path: str, max_rows: int = None):
+
+        def save_single_file():
+            with open(path, 'wb') as file:
+                pickle.dump(data, file)
+
+        if max_rows is None:
+            save_single_file()
+        elif len(data) > max_rows:
+            max_counter = ceil((len(data) - 1) / max_rows)
+            last_row = 1
+            headers = data[0]
+
+            for counter in range(1, max_counter + 1):
+                cached_data = [headers]
+                cached_data += data[last_row:last_row + max_rows]
+                with open(f"{path[:-4]}_{counter}.pkl", 'wb') as file:
+                    pickle.dump(cached_data, file)
+
+                last_row += max_rows
+        else:
+            save_single_file()

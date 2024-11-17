@@ -18,8 +18,9 @@ class Table:
 
     def save_table(self,
                    handler: Type[CSVHandler | PickleHandler | TXTHandler],
-                   path: str):
-        handler.save_table(self._data, path)
+                   path: str,
+                   max_rows: int = None):
+        handler.save_table(self._data, path, max_rows)
 
     def _get_column_widths(self) -> list[int]:
         """Определяет максимальные ширины колонок для красивого форматирования таблицы"""

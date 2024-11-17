@@ -21,7 +21,28 @@ class CSVHandler:
         return result
 
     @staticmethod
-    def save_table(data, path: str):
-        with open(path, "w", newline='') as file:
-            writer = csv.writer(file)
-            writer.writerows(data)
+    def save_table(data, path: str, max_rows: int = None):
+
+        def save_single_file(path):
+            with open(path, "w", newline='') as file:
+                writer = csv.writer(file)
+                writer.writerows(data)
+
+        if max_rows is None:
+            save_single_file(path)
+        elif len(data) > max_rows:
+            counter = 1
+            headers = ",".join(data[0]) + "\n"
+            while True:
+                if len(data) > 0:
+                    with open(f"{path[:-4]}_{counter}.csv", "w", newline='') as file:
+                        if counter != 1: file.write(headers)
+                        writer = csv.writer(file)
+                        writer.writerows(data[:max_rows if len(data) > max_rows else len(data)])
+                        data = data[max_rows if len(data) > max_rows else len(data):]
+                        counter += 1
+                else:
+                    break
+
+        else:
+            save_single_file(path)
