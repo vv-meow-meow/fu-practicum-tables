@@ -2,6 +2,7 @@ from math import ceil
 
 
 class TXTHandler:
+    """Handler for managing tabular data in TXT format."""
 
     @staticmethod
     def save_table(data, path: str, max_rows: int):

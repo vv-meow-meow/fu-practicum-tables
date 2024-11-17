@@ -3,6 +3,7 @@ from math import ceil
 
 
 class PickleHandler:
+    """Handler for managing tabular data in Pickle format."""
 
     @staticmethod
     def load_table(*paths: str):

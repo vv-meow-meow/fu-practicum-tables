@@ -2,6 +2,7 @@ import csv
 
 
 class CSVHandler:
+    """Handler for managing tabular data in CSV format."""
 
     @staticmethod
     def load_table(*paths: str):
