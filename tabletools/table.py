@@ -8,10 +8,10 @@ if TYPE_CHECKING:  # Type hinting
 
 
 class Table:
-    """Class to manage tabular data in memory with support for various file operations.
+    """Класс для работы с табличными данными в памяти с поддержкой операций с файлами.
 
     Attributes:
-        _data (list[list[Any]]): Internal representation of table data as a list of lists.
+        _data (list[list[Any]]): Внутреннее представление таблицы в виде списка списков.
     """
 
     def __init__(self, data=None):
@@ -20,7 +20,7 @@ class Table:
     def load_table(self,
                    handler: Type[CSVHandler | PickleHandler],
                    *paths: str):
-        """Loads table data using the specified handler"""
+        """Загружает данные таблицы с использованием указанного обработчика."""
         self._data = handler.load_table(*paths)
 
     def save_table(self,
@@ -28,12 +28,12 @@ class Table:
                    path: str,
                    max_rows: int = None):
         """
-        Saves table data using the specified handler.
+        Сохраняет данные таблицы с использованием указанного обработчика.
 
         Args:
-            handler (Type[CSVHandler | PickleHandler | TXTHandler]): Handler class to save data.
-            path (str): Path to save the file.
-            max_rows (int, optional): Maximum rows per file. Defaults to None.
+            handler (Type[CSVHandler | PickleHandler | TXTHandler]): Класс обработчика для сохранения данных.
+            path (str): Путь для сохранения файла.
+            max_rows (int, optional): Максимальное количество строк на файл. По умолчанию None.
         """
         handler.save_table(self._data, path, max_rows)
 
@@ -58,15 +58,15 @@ class Table:
                            stop=None,
                            copy_table=False):
         """
-        Retrieves rows by their numeric indices.
+        Извлекает строки по их числовым индексам.
 
         Args:
-            start (int): The starting row index.
-            stop (int, optional): The stopping row index. Defaults to None.
-            copy_table (bool, optional): Whether to return a copy of the rows. Defaults to False.
+            start (int): Начальный индекс строки.
+            stop (int, optional): Конечный индекс строки. По умолчанию None.
+            copy_table (bool, optional): Возвращать ли копию строк. По умолчанию False.
 
         Returns:
-            list[list[Any]]: A list of rows from the specified range.
+            list[list[Any]]: Список строк из указанного диапазона.
         """
         match stop:
             case None:
@@ -81,13 +81,13 @@ class Table:
     def get_rows_by_index(self,
                           *values,
                           copy_table=False):
-        """Retrieves rows by matching the first column's value"""
+        """Извлекает строки, соответствующие значениям в первом столбце."""
         result = [row for row in self._data if row[0] in values]
         if copy_table: result = deepcopy(result)
         return result
 
     def _infer_type(self, column):
-        """Infers the data type of column"""
+        """Определяет тип данных для столбца."""
         types = set()
         for value in column:
             if isinstance(value, int):
@@ -114,13 +114,14 @@ class Table:
         return str
 
     def get_column_types(self, by_number=True):
-        """Determines the types of each column in the table.
+        """
+        Определяет типы данных для каждого столбца таблицы.
 
         Args:
-            by_number (bool, optional): Whether to use column numbers as keys. Defaults to True.
+            by_number (bool, optional): Использовать ли номера столбцов в качестве ключей. По умолчанию True.
 
         Returns:
-            dict: A dictionary mapping column names or indices to their inferred types.
+            dict: Словарь, сопоставляющий названия или индексы столбцов с их определёнными типами.
         """
         if not self._data: return {}
 
@@ -134,14 +135,15 @@ class Table:
     def set_column_types(self,
                          column_types,
                          by_number=True):
-        """Sets the types of specified columns.
+        """
+        Устанавливает типы данных для указанных столбцов.
 
         Args:
-            column_types (dict): A dictionary mapping column names or indices to desired types.
-            by_number (bool, optional): Whether to use column numbers as keys. Defaults to True.
+            column_types (dict): Словарь, сопоставляющий названия или индексы столбцов с желаемыми типами.
+            by_number (bool, optional): Использовать ли номера столбцов в качестве ключей. По умолчанию True.
 
         Raises:
-            ValueError: If the table is empty or conversion fails for a value.
+            ValueError: Если таблица пуста или преобразование значения не удалось.
         """
         if not self._data:
             raise ValueError("Table is empty")
@@ -156,16 +158,17 @@ class Table:
                     raise ValueError(f"Cannot convert value '{row[col_index]}' to {desired_type}'")
 
     def get_values(self, column: int | str = 0) -> list:
-        """Retrieves all values in a specified column.
+        """
+        Извлекает все значения из указанного столбца.
 
         Args:
-            column (int | str, optional): The column index or name. Defaults to 0.
+            column (int | str, optional): Индекс или название столбца. По умолчанию 0.
 
         Returns:
-            list: A list of values from the specified column.
+            list: Список значений из указанного столбца.
 
         Raises:
-            TypeError: If the column type is invalid.
+            TypeError: Если тип столбца недопустим.
         """
         if isinstance(column, int):
             target_index = column
@@ -179,17 +182,18 @@ class Table:
                 return list(column)
 
     def get_value(self, column=0):
-        """Retrieves the first value in a specified column.
+        """
+        Извлекает первое значение из указанного столбца.
 
         Args:
-            column (int | str, optional): The column index or name. Defaults to 0.
+            column (int | str, optional): Индекс или название столбца. По умолчанию 0.
 
         Returns:
-            Any: The first value in the specified column.
+            Any: Первое значение в указанном столбце.
 
         Raises:
-            ValueError: If the table is empty.
-            TypeError: If the column type is invalid.
+            ValueError: Если таблица пуста.
+            TypeError: Если тип столбца недопустим.
         """
         if len(self._data) < 2:
             raise ValueError("Table is empty")
@@ -206,15 +210,16 @@ class Table:
     def set_values(self,
                    values: list,
                    column: list | str = 0):
-        """Updates all values in a specified column.
+        """
+        Обновляет все значения в указанном столбце.
 
         Args:
-            values (list): The new values to set in the column.
-            column (int | str, optional): The column index or name. Defaults to 0.
+            values (list): Новые значения для столбца.
+            column (int | str, optional): Индекс или название столбца. По умолчанию 0.
 
         Raises:
-            TypeError: If the column type is invalid.
-            ValueError: If the number of values does not match the table rows.
+            TypeError: Если тип столбца недопустим.
+            ValueError: Если количество значений не совпадает с количеством строк в таблице.
         """
         if isinstance(column, int):
             target_col_index = column
@@ -232,15 +237,16 @@ class Table:
     def set_value(self,
                   value,
                   column: list | str = 0):
-        """Updates the first value in a specified column.
+        """
+        Обновляет первое значение в указанном столбце.
 
         Args:
-            value (Any): The new value to set.
-            column (int | str, optional): The column index or name. Defaults to 0.
+            value (Any): Новое значение.
+            column (int | str, optional): Индекс или название столбца. По умолчанию 0.
 
         Raises:
-            ValueError: If the table is empty.
-            TypeError: If the column type is invalid.
+            ValueError: Если таблица пуста.
+            TypeError: Если тип столбца недопустим.
         """
         if len(self._data) < 2:
             raise ValueError("Table is empty")
@@ -257,14 +263,15 @@ class Table:
     def concat(self,
                table_1: Table,
                table_2: Table):
-        """Concatenates two tables into the current table.
+        """
+        Объединяет две таблицы в текущую таблицу.
 
         Args:
-            table_1 (Table): The first table.
-            table_2 (Table): The second table.
+            table_1 (Table): Первая таблица.
+            table_2 (Table): Вторая таблица.
 
         Raises:
-            ValueError: If the current table is not empty or headers conflict.
+            ValueError: Если текущая таблица не пуста или заголовки конфликтуют.
         """
         if self._data:
             raise ValueError("Table is not empty, cannot concatenate tables")
@@ -293,16 +300,17 @@ class Table:
 
     def split(self,
               row_number: int) -> Tuple[Table, Table]:
-        """Splits the table into two parts based on a row number.
+        """
+        Разделяет таблицу на две части по номеру строки.
 
         Args:
-            row_number (int): The row number to split at.
+            row_number (int): Номер строки, по которой будет выполнено разделение.
 
         Returns:
-            tuple[Table, Table]: Two `Table` objects representing the split data.
+            tuple[Table, Table]: Два объекта `Table`, представляющих разделённые данные.
 
         Raises:
-            ValueError: If the table is empty.
+            ValueError: Если таблица пуста.
         """
         if not self._data:
             raise ValueError("Table is empty")
